@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import CsvReader from "./components/CsvParser/CsvReader";
+import HybridTable from "./components/Table/HybridTable";
+import { Button, Container } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 
-function App() {
+const useStyles = makeStyles((theme) => ({
+  root: {
+    marginTop: theme.spacing(2),
+    textAlign: "center",
+  },
+}));
+
+const App = () => {
+  const classes = useStyles();
+  const [csvData, setCSVData] = useState([]);
+  const [loaded, setLoaded] = useState(false);
+  const [showTable, setShowTable] = useState(false);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container maxWidth="md" className={classes.root}>
+      <CsvReader setCSVData={setCSVData} setLoaded={setLoaded} />
+      <Button variant="contained" className={classes.submit} disabled={!loaded} onClick={e => setShowTable(true)}>
+        Genrate Table
+      </Button>
+      {/* {showTable ? <HybridTable tableData={csvData} /> : null} */}
+      <HybridTable />
+    </Container>
   );
-}
+};
 
 export default App;
