@@ -23,8 +23,7 @@ const App = () => {
       <Button variant="contained" className={classes.submit} disabled={!loaded} onClick={e => setShowTable(true)}>
         Genrate Table
       </Button>
-      {/* {showTable ? <HybridTable tableData={csvData} /> : null} */}
-      <HybridTable />
+      {showTable ? <HybridTable tableData={csvData.map(e => e.data)} /> : null}
     </Container>
   );
 };
