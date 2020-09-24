@@ -15,6 +15,7 @@ import Filter from "../Filter/Filter";
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(3),
   },
 }));
 
@@ -46,7 +47,7 @@ const HybridTable = (props) => {
       }
     };
     doSorting();
-  }, [order, orderBy]);
+  }, [order, orderBy]); // eslint-disable-line
 
   useEffect(() => {
     const doSearching = () => {
@@ -55,7 +56,7 @@ const HybridTable = (props) => {
       }
     };
     doSearching();
-  }, [searchText, searchDate]);
+  }, [searchText, searchDate]); // eslint-disable-line
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -97,7 +98,7 @@ const HybridTable = (props) => {
     const dlen = date.length;
     const sdate = date.split("-").reverse().join("/");
 
-    const currentData = completeData.filter((row) => {
+    const currentData = completeData.filter((row) => { // eslint-disable-line
       const { deliveryPincode, orderDate, items } = row;
       if (len && dlen) {
         if (orderDate === sdate) {
@@ -117,50 +118,63 @@ const HybridTable = (props) => {
         return row;
       }
     });
+
     return currentData;
   };
 
   if (tableData === undefined) return <></>;
-  return (
-    <>
-      <Filter
-        searchText={searchText}
-        searchDate={searchDate}
-        setSearchText={setSearchText}
-        setSearchDate={setSearchDate}
-      />
-      <TableContainer className={classes.root} component={Paper} elevation={3}>
-        <Table size="small">
-          <HTableHead
-            sortRequestHandler={handleRequestSort}
-            order={order}
-            orderBy={orderBy}
+
+  if(tableData.length){
+    const obj = tableData[0];
+    if( !obj.hasOwnProperty("orderId") || !obj.hasOwnProperty("customerId") || !obj.hasOwnProperty("deliveryPincode") || !obj.hasOwnProperty("orderDate") || !obj.hasOwnProperty("items") ){
+      return (
+        <h4>Data is not in valid format</h4>
+      )
+    }
+    else{
+      return (
+        <>
+          <Filter
+            searchText={searchText}
+            searchDate={searchDate}
+            setSearchText={setSearchText}
+            setSearchDate={setSearchDate}
           />
-          <TableBody>
-            {currentData.map((row, id) => {
-              const items = row.items.split(";");
-              return (
-                <TableRow hover key={id}>
-                  <TableCell align="center">{row.orderId}</TableCell>
-                  <TableCell align="center">{row.customerId}</TableCell>
-                  <TableCell align="center">{row.deliveryPincode}</TableCell>
-                  <TableCell align="center">{row.orderDate}</TableCell>
-                  <TableCell align="center">
-                    {items.map((e, idx) => (
-                      <span key={Math.random()}>
-                        {e}
-                        {idx + 1 === items.length ? null : <br />}
-                      </span>
-                    ))}
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </>
-  );
+          <TableContainer className={classes.root} component={Paper} elevation={3}>
+            <Table size="small">
+              <HTableHead
+                sortRequestHandler={handleRequestSort}
+                order={order}
+                orderBy={orderBy}
+              />
+              <TableBody>
+                {currentData.map((row, id) => {
+                  const items = row.items?.split(";");
+                  return (
+                    <TableRow hover key={id}>
+                      <TableCell align="center">{row.orderId}</TableCell>
+                      <TableCell align="center">{row.customerId}</TableCell>
+                      <TableCell align="center">{row.deliveryPincode}</TableCell>
+                      <TableCell align="center">{row.orderDate}</TableCell>
+                      <TableCell align="center">
+                        {items?.map((e, idx) => (
+                          <span key={Math.random()}>
+                            {e}
+                            {idx + 1 === items.length ? null : <br />}
+                          </span>
+                        ))}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </>
+      );
+    }
+  }
+
 };
 
 export default HybridTable;

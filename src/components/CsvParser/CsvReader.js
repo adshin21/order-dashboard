@@ -39,7 +39,7 @@ const buttonRef = React.createRef();
 
 const CsvReader = (props) => {
 
-    const { setCSVData, setLoaded } = props;
+    const { setCSVData, setLoaded, setShowTable } = props;
 
     const handleOpenDialog = (e) => {
         if (buttonRef.current) {
@@ -59,11 +59,12 @@ const CsvReader = (props) => {
     const handleOnRemoveFile = (data) => {
         setCSVData(data);
         setLoaded(false);
+        setShowTable(false);
     };
 
     const handleRemoveFile = (e) => {
         if (buttonRef.current) {
-        buttonRef.current.removeFile(e);
+            buttonRef.current.removeFile(e);
         }
     };
 

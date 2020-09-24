@@ -19,11 +19,11 @@ const App = () => {
 
   return (
     <Container maxWidth="md" className={classes.root}>
-      <CsvReader setCSVData={setCSVData} setLoaded={setLoaded} />
-      <Button variant="contained" className={classes.submit} disabled={!loaded} onClick={e => setShowTable(true)}>
-        Genrate Table
+      <CsvReader setCSVData={setCSVData} setLoaded={setLoaded} setShowTable={setShowTable} />
+      <Button variant="contained" className={classes.submit} disabled={!loaded} onClick={e => setShowTable(!showTable)}>
+        {showTable === false ? "Dispaly Table" : "Hide Table" }
       </Button>
-      {showTable ? <HybridTable tableData={csvData.map(e => e.data)} /> : null}
+      {showTable ? <HybridTable tableData={csvData?.map(e => e.data)} /> : null}
     </Container>
   );
 };
